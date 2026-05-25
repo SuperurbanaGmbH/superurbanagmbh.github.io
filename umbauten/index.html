@@ -9,102 +9,119 @@
     if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;
   })();</script>
   <title>Umbauten — Superurbana GmbH</title>
-  <meta name="description" content="Energieeffiziente Gebäudesanierungen in der Schweiz. Superurbana GmbH verbindet architektonisches Design mit wirksamer Gebäudetechnik." />
+  <meta name="description" content="Energieeffiziente Gebäudesanierungen in der Schweiz — Superurbana GmbH." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
-  <a class="skip-link" href="#page">Zum Inhalt</a>
+  <a class="skip-link" href="#page" data-i18n="skip">Zum Inhalt</a>
 
-  <div class="mobile-bar">
-    <div class="brand-mini"><a href="/">Superurbana</a></div>
-    <button class="menu-btn" id="menu-btn" onclick="toggleSidebar()">Menü</button>
+  <!-- ── Top navigation ── -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="header-brand">Superurbana <span class="brand-sub">GmbH</span></a>
+
+      <!-- Desktop nav -->
+      <nav class="header-nav" aria-label="Hauptnavigation">
+        <a href="/umbauten/" class="nav-link" aria-current="page" data-i18n="nav.projects">Umbauten</a>
+        <a href="mailto:info@superurbana.com" class="nav-link" data-i18n="nav.contact">Kontakt</a>
+        <div class="nav-divider" aria-hidden="true"></div>
+        <button class="nav-toggle" onclick="toggleTheme()" aria-label="Theme wechseln">
+          <span class="opt active" data-theme-opt="light" data-i18n="theme.light">HELL</span>
+          <span class="sep">/</span>
+          <span class="opt" data-theme-opt="dark" data-i18n="theme.dark">DUNKEL</span>
+        </button>
+        <button class="nav-toggle" onclick="toggleLang()" aria-label="Sprache wechseln">
+          <span class="opt active" data-lang-opt="de">DE</span>
+          <span class="sep">/</span>
+          <span class="opt" data-lang-opt="en">EN</span>
+        </button>
+      </nav>
+
+      <!-- Mobile hamburger -->
+      <button class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleMobileMenu()" data-i18n="menu.open">Menü</button>
+    </div>
+  </header>
+
+  <!-- Mobile overlay menu -->
+  <div class="mobile-overlay" id="mobile-overlay" aria-hidden="true">
+    <a href="/umbauten/" class="mob-link" data-i18n="nav.projects">Umbauten</a>
+    <a href="mailto:info@superurbana.com" class="mob-link" data-i18n="nav.contact">Kontakt</a>
+    <div class="mob-controls">
+      <div class="mob-control-row">
+        <span class="mob-control-label" data-i18n="theme.label">Theme</span>
+        <button class="nav-toggle" onclick="toggleTheme()">
+          <span class="opt active" data-theme-opt="light" data-i18n="theme.light">HELL</span>
+          <span class="sep">/</span>
+          <span class="opt" data-theme-opt="dark" data-i18n="theme.dark">DUNKEL</span>
+        </button>
+      </div>
+      <div class="mob-control-row">
+        <span class="mob-control-label" data-i18n="lang.label">Sprache</span>
+        <button class="nav-toggle" onclick="toggleLang()">
+          <span class="opt active" data-lang-opt="de">DE</span>
+          <span class="sep">/</span>
+          <span class="opt" data-lang-opt="en">EN</span>
+        </button>
+      </div>
+    </div>
   </div>
 
-  <div class="shell">
+  <!-- ── Page content ── -->
+  <main class="content page-wrap" id="page" tabindex="-1">
 
-    <aside class="sidebar" id="sidebar">
-      <div class="brand">
-        <a href="/">
-          <span class="name">Superurbana GmbH</span>
-          <span class="role">Ennetbaden, AG, Schweiz</span>
-        </a>
+    <section class="page-intro">
+      <p class="page-eyebrow">
+        <a href="/" data-i18n="umbauten.eyebrow">Start</a>
+        <span class="crumb">/</span>
+        <span>01</span>
+      </p>
+      <h1 class="page-title" data-i18n="umbauten.title">Umbauten</h1>
+      <p class="page-lede" data-i18n="umbauten.lede">Wir verstehen Energieeffizienz und Klimaneutralität als Aufgabe, bei der exzellentes architektonisches Design und wirksame Gebäudetechnik zu einem bezahlbaren Gesamtkonzept verschmelzen.</p>
+    </section>
+
+    <section style="padding-top: 0; border-top: none;">
+      <div class="page-body" style="padding-block: 0 48px;">
+        <p data-i18n="umbauten.body">Schön, komfortabel und effizient zu bauen muss kein Widerspruch zur Wirtschaftlichkeit sein. Mit unserer Projektmanagement-Kompetenz und unserem starken Netzwerk an Lieferanten und Partnern begleiten wir Sanierungsprojekte von der ersten Idee bis zur schlüsselfertigen Umsetzung.</p>
       </div>
 
-      <div class="nav-group">
-        <ul class="nav-list" role="list">
-          <li><a href="/"><span class="num">01</span><span>Start</span><span class="arrow">→</span></a></li>
-          <li><a href="/umbauten/" aria-current="page"><span class="num">02</span><span>Umbauten</span><span class="arrow">→</span></a></li>
-          <li><a href="mailto:info@superurbana.com"><span class="num">03</span><span>Kontakt</span><span class="arrow">↗</span></a></li>
-        </ul>
-      </div>
+      <div class="project-list">
 
-      <div class="sidebar-controls">
-        <div class="control-row">
-          <span class="control-label">Theme</span>
-          <button class="toggle" onclick="toggleTheme()" aria-label="Theme wechseln">
-            <span class="opt active" data-theme-opt="light">HELL</span>
-            <span class="sep">/</span>
-            <span class="opt" data-theme-opt="dark">DUNKEL</span>
-          </button>
+        <div class="project">
+          <figure class="project-figure">
+            <img src="/assets/nidau.jpg" alt="Gewerbeüberbauung Zihlstrasse, Nidau" loading="lazy" />
+          </figure>
+          <p class="project-label" data-i18n="nidau.label">Projekt · Nidau, BE</p>
+          <h2 class="project-title" data-i18n="nidau.title">Nidau</h2>
+          <p class="project-desc" data-i18n="nidau.desc">Energetische Sanierung der Gewerbeüberbauung an der Zihlstrasse. Kombination aus Hüllenoptimierung und moderner Haustechnik für einen wirtschaftlichen Gesamtansatz.</p>
         </div>
-      </div>
-    </aside>
 
-    <main class="content" id="page" tabindex="-1">
-
-      <section class="page-intro">
-        <p class="page-eyebrow">
-          <a href="/">Start</a>
-          <span class="crumb">/</span>
-          <span>02</span>
-        </p>
-        <h1 class="page-title">Umbauten</h1>
-        <p class="page-lede">Wir verstehen Energieeffizienz und Klimaneutralität als Aufgabe, bei der exzellentes architektonisches Design und wirksame Gebäudetechnik zu einem bezahlbaren Gesamtkonzept verschmelzen.</p>
-      </section>
-
-      <section class="page-body" style="padding-top: 0; border-top: none;">
-        <p>Schön, komfortabel und effizient zu bauen muss kein Widerspruch zur Wirtschaftlichkeit sein. Mit unserer Projektmanagement-Kompetenz und unserem starken Netzwerk an Lieferanten und Partnern begleiten wir Sanierungsprojekte von der ersten Idee bis zur schlüsselfertigen Umsetzung.</p>
-      </section>
-
-      <section style="padding-top: 0; border-top: none;">
-        <div class="project-list">
-
-          <div class="project">
-            <figure class="project-figure">
-              <img src="/assets/nidau.jpg" alt="Gewerbeüberbauung Zihlstrasse, Nidau" loading="lazy" />
-            </figure>
-            <p class="project-label">Projekt · Nidau, BE</p>
-            <h2 class="project-title">Nidau</h2>
-            <p class="project-desc">Energetische Sanierung der Gewerbeüberbauung an der Zihlstrasse. Kombination aus Hüllenoptimierung und moderner Haustechnik für einen wirtschaftlichen Gesamtansatz.</p>
-          </div>
-
-          <div class="project">
-            <figure class="project-figure">
-              <img src="/assets/ennetbaden.png" alt="Sanierungsprojekt Ennetbaden" loading="lazy" />
-            </figure>
-            <p class="project-label">Projekt · Ennetbaden, AG</p>
-            <h2 class="project-title">Ennetbaden</h2>
-            <p class="project-desc">Wohngebäudesanierung in Ennetbaden mit Fokus auf Wärmeschutz und erneuerbare Energieversorgung. Umsetzung unter laufendem Betrieb, termingerecht und im Budget.</p>
-          </div>
-
+        <div class="project">
+          <figure class="project-figure">
+            <img src="/assets/ennetbaden.png" alt="Sanierungsprojekt Ennetbaden" loading="lazy" />
+          </figure>
+          <p class="project-label" data-i18n="ennetbaden.label">Projekt · Ennetbaden, AG</p>
+          <h2 class="project-title" data-i18n="ennetbaden.title">Ennetbaden</h2>
+          <p class="project-desc" data-i18n="ennetbaden.desc">Wohngebäudesanierung in Ennetbaden mit Fokus auf Wärmeschutz und erneuerbare Energieversorgung. Umsetzung unter laufendem Betrieb, termingerecht und im Budget.</p>
         </div>
-      </section>
 
-      <div class="page-nav">
-        <a href="/">← Zurück zur Startseite</a>
       </div>
 
-    </main>
+      <div class="back-link">
+        <a href="/" data-i18n="back">← Zurück zur Startseite</a>
+      </div>
+    </section>
 
-    <footer class="site-footer">
-      <span>© 2016 – 2026 Superurbana GmbH</span>
-      <span>Ennetbaden, AG, Schweiz</span>
-    </footer>
+  </main>
 
-  </div>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span data-i18n="footer.copy">© 2016 – 2026 Superurbana GmbH</span>
+      <span data-i18n="footer.loc">Ennetbaden, AG, Schweiz</span>
+    </div>
+  </footer>
 
   <script src="/app.js"></script>
 </body>
