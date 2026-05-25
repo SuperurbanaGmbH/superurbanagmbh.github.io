@@ -38,6 +38,7 @@ const i18n = {
     'ennetbaden.label':   'Projekt · Ennetbaden, AG',
     'ennetbaden.title':   'Ennetbaden',
     'ennetbaden.desc':    'Wohngebäudesanierung in Ennetbaden mit Fokus auf Wärmeschutz und erneuerbare Energieversorgung. Umsetzung unter laufendem Betrieb, termingerecht und im Budget.',
+    'video.caption':      'Superurbana GmbH — Energieeffizienz für die Stadt',
     'back':               '← Zurück zur Startseite',
   },
   en: {
@@ -79,6 +80,7 @@ const i18n = {
     'ennetbaden.label':   'Project · Ennetbaden, AG',
     'ennetbaden.title':   'Ennetbaden',
     'ennetbaden.desc':    'Residential building renovation in Ennetbaden focused on thermal insulation and renewable energy supply. Delivered on time and on budget while the building remained occupied.',
+    'video.caption':      'Superurbana GmbH — Energy Efficiency for the City',
     'back':               '← Back to Home',
   }
 };
