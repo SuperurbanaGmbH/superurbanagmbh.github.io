@@ -2,7 +2,7 @@ const i18n = {
   de: {
     'nav.projects':       'Projekte',
     'nav.contact':        'Kontakt',
-    'hero.title':         'Energieeffizienz<br>für die Stadt.',
+    'hero.title':         'Energieeffizienz.<br>Made in Switzerland.',
     'hero.lede':          'Superurbana GmbH verbindet exzellentes architektonisches Design mit wirksamer Gebäudetechnik — für bezahlbare, klimaneutrale Gesamtkonzepte.',
     'stats.founded':      'Gegründet',
     'stats.years':        'Jahre aktiv',
@@ -47,7 +47,7 @@ const i18n = {
   en: {
     'nav.projects':       'Projects',
     'nav.contact':        'Contact',
-    'hero.title':         'Energy Efficiency<br>for the City.',
+    'hero.title':         'Energy Efficiency<br>Made in Switzerland.',
     'hero.lede':          'Superurbana GmbH combines excellent architectural design with effective building technology — for affordable, climate-neutral concepts.',
     'stats.founded':      'Founded',
     'stats.years':        'Years Active',
