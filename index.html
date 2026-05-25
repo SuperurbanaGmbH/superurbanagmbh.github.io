@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>(function(){
+    var t=localStorage.getItem("theme");
+    if(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)t="dark";
+    if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;
+  })();</script>
+  <title>Superurbana GmbH — Energieeffizienz &amp; Klimaneutralität</title>
+  <meta name="description" content="Superurbana GmbH bietet Energieeffizienz-Beratung, Gebäudesanierungen und CEA-Training für Städte und Unternehmen in Europa und dem Nahen Osten." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#page">Zum Inhalt</a>
+
+  <div class="mobile-bar">
+    <div class="brand-mini"><a href="/">Superurbana</a></div>
+    <button class="menu-btn" id="menu-btn" onclick="toggleSidebar()">Menü</button>
+  </div>
+
+  <div class="shell">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <a href="/">
+          <span class="name">Superurbana GmbH</span>
+          <span class="role">Ennetbaden, AG, Schweiz</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <ul class="nav-list" role="list">
+          <li><a href="/" aria-current="page"><span class="num">01</span><span>Start</span><span class="arrow">→</span></a></li>
+          <li><a href="/umbauten/"><span class="num">02</span><span>Umbauten</span><span class="arrow">→</span></a></li>
+          <li><a href="mailto:info@superurbana.com"><span class="num">03</span><span>Kontakt</span><span class="arrow">↗</span></a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-controls">
+        <div class="control-row">
+          <span class="control-label">Theme</span>
+          <button class="toggle" onclick="toggleTheme()" aria-label="Theme wechseln">
+            <span class="opt active" data-theme-opt="light">HELL</span>
+            <span class="sep">/</span>
+            <span class="opt" data-theme-opt="dark">DUNKEL</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content" id="page" tabindex="-1">
+
+      <section class="hero">
+        <h1>Energieeffizienz<br>für die Stadt.</h1>
+        <p class="lede">Superurbana GmbH verbindet exzellentes architektonisches Design mit wirksamer Gebäudetechnik — für bezahlbare, klimaneutrale Gesamtkonzepte.</p>
+
+        <div class="stats-bar">
+          <div class="stat"><span class="stat-num">2016</span><span class="stat-lbl">Gegründet</span></div>
+          <div class="stat"><span class="stat-num">9</span><span class="stat-lbl">Jahre aktiv</span></div>
+          <div class="stat"><span class="stat-num">30+</span><span class="stat-lbl">Kunden</span></div>
+          <div class="stat"><span class="stat-num">12+</span><span class="stat-lbl">Länder</span></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="nav-label">Leistungen</div>
+        <div class="work-list">
+          <a href="/umbauten/" class="work-row">
+            <span class="work-num">02</span>
+            <span>
+              <span class="work-title">Umbauten</span>
+              <span class="work-desc">Energieeffiziente Gebäudesanierungen in der Schweiz</span>
+            </span>
+            <span class="work-arrow">→</span>
+          </a>
+        </div>
+      </section>
+
+      <section>
+        <div class="nav-label">Über uns</div>
+        <div class="page-body" style="padding-block: 0;">
+          <p>Superurbana GmbH wurde 2016 gegründet, um modernste urbane Energiesimulation in die Praxis zu bringen — als eines der ersten Unternehmen weltweit, das die City Energy Analyst (CEA)-Plattform kommerziell eingesetzt hat.</p>
+          <p>Schön, komfortabel und effizient zu bauen muss kein Widerspruch zur Wirtschaftlichkeit sein. Mit unserem Projektmanagement-Know-how und einem starken Netzwerk an Lieferanten und Partnern begleiten wir Sanierungsprojekte von der Konzeption bis zur Umsetzung.</p>
+          <p>Von 2023 bis 2025 realisierte Superurbana Energieprojekte in der Schweiz und schult Unternehmen in ganz Europa und dem Nahen Osten in datengetriebener Energieanalyse.</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="nav-label">Kontakt</div>
+        <ul class="contact-list">
+          <li>
+            <span class="ckey">E-Mail</span>
+            <a href="mailto:info@superurbana.com">info@superurbana.com</a>
+            <span class="ext">↗</span>
+          </li>
+          <li>
+            <span class="ckey">Adresse</span>
+            <span>Ennetbaden, AG, Schweiz</span>
+            <span class="ext"></span>
+          </li>
+        </ul>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <span>© 2016 – 2026 Superurbana GmbH</span>
+      <span>Ennetbaden, AG, Schweiz</span>
+    </footer>
+
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
