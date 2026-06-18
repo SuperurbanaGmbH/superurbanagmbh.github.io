@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nidau — Vorher / Nachher · Superurbana GmbH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #f8f7f4;
+      --fg:       #1a1a18;
+      --muted:    #888780;
+      --hairline: rgba(26,26,24,.12);
+      --font-sans: 'Inter Tight', system-ui, sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ── */
+    .proto-header {
+      border-bottom: 1px solid var(--hairline);
+      padding: 18px 40px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .header-left {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+    }
+    .proto-brand {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      text-decoration: none;
+      color: var(--fg);
+    }
+    .proto-brand .sub { color: var(--muted); font-weight: 400; }
+    .proto-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .proto-heading {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    /* ── Stage ── */
+    .stage {
+      position: relative;
+      aspect-ratio: 4/3;
+      max-width: 960px;
+      max-height: 680px;
+      margin: 0 auto;
+      overflow: hidden;
+      background: #111;
+    }
+
+    /* ── Compare slot (one per room, stacked) ── */
+    .compare-wrap {
+      position: absolute;
+      inset: 0;
+      cursor: col-resize;
+      user-select: none;
+      touch-action: pan-y;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+    }
+    .compare-wrap.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .img-before,
+    .img-after {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      pointer-events: none;
+      -webkit-user-drag: none;
+    }
+
+    .img-after {
+      clip-path: inset(0 0 0 var(--pos, 50%));
+    }
+
+    /* Drag line */
+    .slider-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: var(--pos, 50%);
+      transform: translateX(-50%);
+      width: 2px;
+      background: #fff;
+      pointer-events: none;
+    }
+
+    /* Handle */
+    .slider-handle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .handle-arrow {
+      font-size: 11px;
+      color: var(--fg);
+      line-height: 1;
+      font-family: var(--font-mono);
+    }
+
+    /* VORHER / NACHHER labels */
+    .img-label {
+      position: absolute;
+      bottom: 20px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+      background: rgba(0,0,0,0.35);
+      padding: 5px 10px;
+      pointer-events: none;
+    }
+    .img-label.before { left: 20px; }
+    .img-label.after  { right: 20px; }
+
+    /* Drag hint */
+    .slider-hint {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.4s;
+    }
+    .slider-hint.hidden { opacity: 0; }
+    .hint-pill {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+      background: rgba(0,0,0,0.4);
+      padding: 7px 14px;
+    }
+
+    /* ── Navigation bar ── */
+    .nav-bar {
+      border-top: 1px solid var(--hairline);
+      padding: 0 40px;
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      height: 72px;
+      max-width: 960px;
+      margin: 0 auto;
+      background: var(--bg);
+    }
+
+    /* Room info — left */
+    .nav-room {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 160px;
+      padding-right: 32px;
+      border-right: 1px solid var(--hairline);
+    }
+    .nav-room-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      min-width: 24px;
+    }
+    .nav-room-name {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      transition: opacity 0.2s;
+    }
+
+    /* Step buttons — center */
+    .nav-steps {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 24px;
+    }
+    .step-btn {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--hairline);
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+      line-height: 1;
+    }
+    .step-btn:hover {
+      color: var(--fg);
+      border-color: rgba(26,26,24,.3);
+    }
+    .step-btn.active {
+      color: var(--fg);
+      background: var(--fg);
+      color: var(--bg);
+      border-color: var(--fg);
+    }
+
+    /* Prev / Next — right */
+    .nav-arrows {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding-left: 32px;
+      border-left: 1px solid var(--hairline);
+    }
+    .arrow-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--fg);
+      padding: 8px 14px;
+      line-height: 1;
+      transition: color 0.15s, opacity 0.15s;
+    }
+    .arrow-btn:disabled { opacity: 0.2; cursor: default; }
+    .arrow-btn:not(:disabled):hover { color: var(--muted); }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .proto-header { padding: 14px 16px; }
+      .proto-heading { display: none; }
+      .nav-bar { padding: 0 16px; height: 64px; }
+      .nav-room { min-width: 0; padding-right: 16px; gap: 8px; }
+      .nav-arrows { padding-left: 16px; }
+      .step-btn { padding: 5px 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="proto-header">
+    <div class="header-left">
+      <a href="/" class="proto-brand">Superurbana <span class="sub">GmbH</span></a>
+      <span class="proto-eyebrow">Nidau · Vorher / Nachher</span>
+    </div>
+    <span class="proto-heading">Prototype</span>
+  </header>
+
+  <!-- Stage: one large before/after comparison -->
+  <div class="stage" id="stage">
+
+    <!-- Slot 0: Bad -->
+    <div class="compare-wrap active" data-slider data-index="0">
+      <img class="img-before" src="images/bath-before.jpg" alt="Bad — Vorher" draggable="false" />
+      <img class="img-after"  src="images/bath-after.jpg"  alt="Bad — Nachher" draggable="false" />
+      <div class="slider-line"><div class="slider-handle">
+        <span class="handle-arrow">◀</span><span class="handle-arrow">▶</span>
+      </div></div>
+      <span class="img-label before">Vorher</span>
+      <span class="img-label after">Nachher</span>
+      <div class="slider-hint"><div class="hint-pill">← Ziehen →</div></div>
+    </div>
+
+    <!-- Slot 1: Küche 1 -->
+    <div class="compare-wrap" data-slider data-index="1">
+      <img class="img-before" src="images/kitchen1-before.jpg" alt="Küche 1 — Vorher" draggable="false" />
+      <img class="img-after"  src="images/kitchen1-after.jpg"  alt="Küche 1 — Nachher" draggable="false" />
+      <div class="slider-line"><div class="slider-handle">
+        <span class="handle-arrow">◀</span><span class="handle-arrow">▶</span>
+      </div></div>
+      <span class="img-label before">Vorher</span>
+      <span class="img-label after">Nachher</span>
+      <div class="slider-hint"><div class="hint-pill">← Ziehen →</div></div>
+    </div>
+
+    <!-- Slot 2: Küche 2 -->
+    <div class="compare-wrap" data-slider data-index="2">
+      <img class="img-before" src="images/kitchen2-before.jpg" alt="Küche 2 — Vorher" draggable="false" />
+      <img class="img-after"  src="images/kitchen2-after.jpg"  alt="Küche 2 — Nachher" draggable="false" />
+      <div class="slider-line"><div class="slider-handle">
+        <span class="handle-arrow">◀</span><span class="handle-arrow">▶</span>
+      </div></div>
+      <span class="img-label before">Vorher</span>
+      <span class="img-label after">Nachher</span>
+      <div class="slider-hint"><div class="hint-pill">← Ziehen →</div></div>
+    </div>
+
+    <!-- Slot 3: Wohnraum -->
+    <div class="compare-wrap" data-slider data-index="3">
+      <img class="img-before" src="images/living-before.jpg" alt="Wohnraum — Vorher" draggable="false" />
+      <img class="img-after"  src="images/living-after.jpg"  alt="Wohnraum — Nachher" draggable="false" />
+      <div class="slider-line"><div class="slider-handle">
+        <span class="handle-arrow">◀</span><span class="handle-arrow">▶</span>
+      </div></div>
+      <span class="img-label before">Vorher</span>
+      <span class="img-label after">Nachher</span>
+      <div class="slider-hint"><div class="hint-pill">← Ziehen →</div></div>
+    </div>
+
+  </div>
+
+  <!-- Navigation bar -->
+  <nav class="nav-bar">
+
+    <div class="nav-room">
+      <span class="nav-room-num" id="nav-num">01</span>
+      <span class="nav-room-name" id="nav-name">Bad</span>
+    </div>
+
+    <div class="nav-steps" id="nav-steps">
+      <button class="step-btn active" data-goto="0">Bad</button>
+      <button class="step-btn" data-goto="1">Küche 1</button>
+      <button class="step-btn" data-goto="2">Küche 2</button>
+      <button class="step-btn" data-goto="3">Wohnraum</button>
+    </div>
+
+    <div class="nav-arrows">
+      <button class="arrow-btn" id="btn-prev" onclick="navigate(-1)" disabled>←</button>
+      <button class="arrow-btn" id="btn-next" onclick="navigate(1)">→</button>
+    </div>
+
+  </nav>
+
+  <script>
+    var rooms = ['Bad', 'Küche 1', 'Küche 2', 'Wohnraum'];
+    var current = 0;
+    var sliders = document.querySelectorAll('[data-slider]');
+    var stepBtns = document.querySelectorAll('.step-btn');
+    var stage = document.getElementById('stage');
+    var ratios = new Array(sliders.length).fill(null);
+
+    // Read natural aspect ratio of each before-image
+    sliders.forEach(function(slider, i) {
+      var img = slider.querySelector('.img-before');
+      function store() {
+        if (img.naturalWidth && img.naturalHeight) {
+          ratios[i] = img.naturalWidth / img.naturalHeight;
+          if (i === current) applyRatio(ratios[i]);
+        }
+      }
+      if (img.complete) store();
+      else img.addEventListener('load', store, { once: true });
+    });
+
+    function applyRatio(r) {
+      stage.style.aspectRatio = r.toFixed(3);
+    }
+
+    function goTo(index) {
+      if (index < 0 || index >= rooms.length) return;
+
+      sliders[current].classList.remove('active');
+      stepBtns[current].classList.remove('active');
+
+      current = index;
+
+      sliders[current].classList.add('active');
+      stepBtns[current].classList.add('active');
+
+      if (ratios[current]) applyRatio(ratios[current]);
+
+      document.getElementById('nav-num').textContent = String(current + 1).padStart(2, '0');
+      document.getElementById('nav-name').textContent = rooms[current];
+
+      document.getElementById('btn-prev').disabled = current === 0;
+      document.getElementById('btn-next').disabled = current === rooms.length - 1;
+    }
+
+    function navigate(dir) { goTo(current + dir); }
+
+    stepBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() { goTo(parseInt(btn.dataset.goto)); });
+    });
+
+    // Drag interaction
+    sliders.forEach(function(wrap) {
+      var active = false;
+      var hint = wrap.querySelector('.slider-hint');
+
+      function setPos(x) {
+        var rect = wrap.getBoundingClientRect();
+        var pct = Math.max(2, Math.min(98, (x - rect.left) / rect.width * 100));
+        wrap.style.setProperty('--pos', pct + '%');
+      }
+
+      function hideHint() { if (hint) hint.classList.add('hidden'); }
+
+      wrap.addEventListener('mousedown', function(e) {
+        active = true; hideHint(); setPos(e.clientX); e.preventDefault();
+      });
+      window.addEventListener('mousemove', function(e) { if (active) setPos(e.clientX); });
+      window.addEventListener('mouseup', function() { active = false; });
+
+      wrap.addEventListener('touchstart', function(e) {
+        active = true; hideHint(); setPos(e.touches[0].clientX);
+      }, { passive: true });
+      wrap.addEventListener('touchmove', function(e) {
+        if (active) setPos(e.touches[0].clientX);
+      }, { passive: true });
+      wrap.addEventListener('touchend', function() { active = false; });
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowRight') navigate(1);
+      if (e.key === 'ArrowLeft')  navigate(-1);
+    });
+  </script>
+
+</body>
+</html>

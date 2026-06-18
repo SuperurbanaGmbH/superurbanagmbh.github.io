@@ -43,6 +43,16 @@ const i18n = {
     'ennetbaden.desc':    'Wohngebäudesanierung in Ennetbaden mit Fokus auf Wärmeschutz und erneuerbare Energieversorgung. Umsetzung unter laufendem Betrieb, termingerecht und im Budget.',
     'video.caption':      'Superurbana GmbH — Energieeffizienz Made in Switzerland',
     'back':               '← Zurück zur Startseite',
+    'back.projects':      '← Zurück zu Projekten',
+    'nidau.lede':         'Energetische Sanierung der Gewerbeüberbauung an der Zihlstrasse — Vorher / Nachher.',
+    'nidau.body':         'Kombination aus Hüllenoptimierung und moderner Haustechnik für einen wirtschaftlichen Gesamtansatz. Mit unserer Projektmanagement-Kompetenz und unserem starken Netzwerk an Lieferanten und Partnern haben wir das Sanierungsprojekt von der ersten Idee bis zur schlüsselfertigen Umsetzung begleitet.',
+    'nidau.room.0':       'Bad',
+    'nidau.room.1':       'Küche 1',
+    'nidau.room.2':       'Küche 2',
+    'nidau.room.3':       'Wohnraum',
+    'slider.before':      'Vorher',
+    'slider.after':       'Nachher',
+    'slider.hint':        '← Ziehen →',
   },
   en: {
     'nav.projects':       'Projects',
@@ -88,6 +98,16 @@ const i18n = {
     'ennetbaden.desc':    'Residential building renovation in Ennetbaden focused on thermal insulation and renewable energy supply. Delivered on time and on budget while the building remained occupied.',
     'video.caption':      'Superurbana GmbH — Energy Efficiency Made in Switzerland',
     'back':               '← Back to Home',
+    'back.projects':      '← Back to Projects',
+    'nidau.lede':         'Energy retrofit of the commercial development on Zihlstrasse — Before / After.',
+    'nidau.body':         'A combination of envelope optimisation and modern building services for a cost-effective overall approach. With our project management expertise and a strong network of suppliers and partners, we guided the renovation from the first idea to turnkey delivery.',
+    'nidau.room.0':       'Bathroom',
+    'nidau.room.1':       'Kitchen 1',
+    'nidau.room.2':       'Kitchen 2',
+    'nidau.room.3':       'Living Room',
+    'slider.before':      'Before',
+    'slider.after':       'After',
+    'slider.hint':        '← Drag →',
   }
 };
 

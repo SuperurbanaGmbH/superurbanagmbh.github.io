@@ -443,7 +443,7 @@ section:first-of-type { border-top: none; padding-top: 0; }
 
 /* ── Project list (Umbauten) ── */
 .project-list { display: flex; flex-direction: column; }
-.project { padding-block: 64px; border-top: 1px solid var(--hairline); }
+.project { padding-block: 64px; border-top: 1px solid var(--hairline); display: block; color: inherit; text-decoration: none; }
 .project:first-of-type { border-top: none; }
 
 .project-figure { margin: 0 0 32px; overflow: hidden; }

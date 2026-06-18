@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>(function(){
+    var t=localStorage.getItem("theme");
+    if(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)t="dark";
+    if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;
+  })();</script>
+  <title>Nidau — Superurbana GmbH</title>
+  <meta name="description" content="Energetische Sanierung der Gewerbeüberbauung an der Zihlstrasse, Nidau BE — Superurbana GmbH." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    /* ── Before/After comparison slider ── */
+    .cs-stage {
+      position: relative;
+      aspect-ratio: 4/3;
+      max-height: 680px;
+      overflow: hidden;
+      background: #111;
+      margin-bottom: 0;
+    }
+    .cs-wrap {
+      position: absolute;
+      inset: 0;
+      cursor: col-resize;
+      user-select: none;
+      touch-action: pan-y;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+    }
+    .cs-wrap.active { opacity: 1; pointer-events: auto; }
+    .cs-img-before,
+    .cs-img-after {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+      -webkit-user-drag: none;
+    }
+    .cs-img-after { clip-path: inset(0 0 0 var(--pos, 50%)); }
+    .cs-line {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: var(--pos, 50%);
+      transform: translateX(-50%);
+      width: 2px;
+      background: #fff;
+      pointer-events: none;
+    }
+    .cs-handle {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    .cs-arrow { font-size: 10px; color: #1a1a18; font-family: var(--font-mono); line-height: 1; }
+    .cs-label {
+      position: absolute;
+      bottom: 16px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+      background: rgba(0,0,0,0.35);
+      padding: 4px 9px;
+      pointer-events: none;
+    }
+    .cs-label.before { left: 16px; }
+    .cs-label.after  { right: 16px; }
+    .cs-hint {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+      opacity: 1; transition: opacity 0.4s;
+    }
+    .cs-hint.hidden { opacity: 0; }
+    .cs-hint-pill {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+      background: rgba(0,0,0,0.4);
+      padding: 6px 12px;
+    }
+
+    /* ── Navigation bar ── */
+    .cs-nav {
+      display: flex;
+      align-items: stretch;
+      border-top: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--hairline);
+      height: 64px;
+      margin-bottom: 48px;
+    }
+    .cs-nav-room {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-right: 28px;
+      border-right: 1px solid var(--hairline);
+      min-width: 140px;
+    }
+    .cs-nav-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    .cs-nav-name {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .cs-steps {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 20px;
+    }
+    .cs-step {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--hairline);
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+      line-height: 1;
+    }
+    .cs-step:hover { color: var(--fg); border-color: rgba(26,26,24,.3); }
+    .cs-step.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+    .cs-arrows {
+      display: flex;
+      align-items: center;
+      padding-left: 28px;
+      border-left: 1px solid var(--hairline);
+    }
+    .cs-arrow-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--fg);
+      padding: 8px 12px;
+      line-height: 1;
+      transition: color 0.15s, opacity 0.15s;
+    }
+    .cs-arrow-btn:disabled { opacity: 0.2; cursor: default; }
+    .cs-arrow-btn:not(:disabled):hover { color: var(--muted); }
+
+    @media (max-width: 600px) {
+      .cs-nav-room { min-width: 0; padding-right: 16px; gap: 8px; }
+      .cs-arrows { padding-left: 16px; }
+      .cs-step { padding: 5px 7px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#page" data-i18n="skip">Zum Inhalt</a>
+
+  <!-- ── Top navigation ── -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="header-brand">Superurbana <span class="brand-sub">GmbH</span></a>
+      <nav class="header-nav" aria-label="Hauptnavigation">
+        <a href="/umbauten/" class="nav-link" aria-current="page" data-i18n="nav.projects">Projekte</a>
+        <a href="mailto:info@superurbana.com" class="nav-link" data-i18n="nav.contact">Kontakt</a>
+        <div class="nav-divider" aria-hidden="true"></div>
+        <button class="nav-toggle" onclick="toggleTheme()" aria-label="Theme wechseln">
+          <span class="opt active" data-theme-opt="light" data-i18n="theme.light">HELL</span>
+          <span class="sep">/</span>
+          <span class="opt" data-theme-opt="dark" data-i18n="theme.dark">DUNKEL</span>
+        </button>
+        <button class="nav-toggle" onclick="toggleLang()" aria-label="Sprache wechseln">
+          <span class="opt active" data-lang-opt="de">DE</span>
+          <span class="sep">/</span>
+          <span class="opt" data-lang-opt="en">EN</span>
+        </button>
+      </nav>
+      <button class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleMobileMenu()" data-i18n="menu.open">Menü</button>
+    </div>
+  </header>
+
+  <!-- Mobile overlay -->
+  <div class="mobile-overlay" id="mobile-overlay" aria-hidden="true">
+    <a href="/umbauten/" class="mob-link" data-i18n="nav.projects">Projekte</a>
+    <a href="mailto:info@superurbana.com" class="mob-link" data-i18n="nav.contact">Kontakt</a>
+    <div class="mob-controls">
+      <div class="mob-control-row">
+        <span class="mob-control-label" data-i18n="theme.label">Theme</span>
+        <button class="nav-toggle" onclick="toggleTheme()">
+          <span class="opt active" data-theme-opt="light" data-i18n="theme.light">HELL</span>
+          <span class="sep">/</span>
+          <span class="opt" data-theme-opt="dark" data-i18n="theme.dark">DUNKEL</span>
+        </button>
+      </div>
+      <div class="mob-control-row">
+        <span class="mob-control-label" data-i18n="lang.label">Sprache</span>
+        <button class="nav-toggle" onclick="toggleLang()">
+          <span class="opt active" data-lang-opt="de">DE</span>
+          <span class="sep">/</span>
+          <span class="opt" data-lang-opt="en">EN</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Page content ── -->
+  <main class="content page-wrap" id="page" tabindex="-1">
+
+    <section class="page-intro">
+      <p class="page-eyebrow">
+        <a href="/" data-i18n="umbauten.eyebrow">Start</a>
+        <span class="crumb">/</span>
+        <a href="/umbauten/" data-i18n="nav.projects">Projekte</a>
+        <span class="crumb">/</span>
+        <span data-i18n="nidau.title">Nidau</span>
+      </p>
+      <h1 class="page-title" data-i18n="nidau.title">Nidau</h1>
+      <p class="page-lede" data-i18n="nidau.lede">Energetische Sanierung der Gewerbeüberbauung an der Zihlstrasse — Vorher / Nachher.</p>
+    </section>
+
+    <section style="padding-top: 0; border-top: none;">
+
+      <!-- Stage -->
+      <div class="cs-stage" id="cs-stage">
+
+        <div class="cs-wrap active" data-cs data-index="0">
+          <img class="cs-img-before" src="/assets/nidau/bath-before.jpg" alt="Bad — Vorher" draggable="false" />
+          <img class="cs-img-after"  src="/assets/nidau/bath-after.jpg"  alt="Bad — Nachher" draggable="false" />
+          <div class="cs-line"><div class="cs-handle"><span class="cs-arrow">◀</span><span class="cs-arrow">▶</span></div></div>
+          <span class="cs-label before" data-i18n="slider.before">Vorher</span>
+          <span class="cs-label after"  data-i18n="slider.after">Nachher</span>
+          <div class="cs-hint"><div class="cs-hint-pill" data-i18n="slider.hint">← Ziehen →</div></div>
+        </div>
+
+        <div class="cs-wrap" data-cs data-index="1">
+          <img class="cs-img-before" src="/assets/nidau/kitchen1-before.jpg" alt="Küche 1 — Vorher" draggable="false" />
+          <img class="cs-img-after"  src="/assets/nidau/kitchen1-after.jpg"  alt="Küche 1 — Nachher" draggable="false" />
+          <div class="cs-line"><div class="cs-handle"><span class="cs-arrow">◀</span><span class="cs-arrow">▶</span></div></div>
+          <span class="cs-label before" data-i18n="slider.before">Vorher</span>
+          <span class="cs-label after"  data-i18n="slider.after">Nachher</span>
+          <div class="cs-hint"><div class="cs-hint-pill" data-i18n="slider.hint">← Ziehen →</div></div>
+        </div>
+
+        <div class="cs-wrap" data-cs data-index="2">
+          <img class="cs-img-before" src="/assets/nidau/kitchen2-before.jpg" alt="Küche 2 — Vorher" draggable="false" />
+          <img class="cs-img-after"  src="/assets/nidau/kitchen2-after.jpg"  alt="Küche 2 — Nachher" draggable="false" />
+          <div class="cs-line"><div class="cs-handle"><span class="cs-arrow">◀</span><span class="cs-arrow">▶</span></div></div>
+          <span class="cs-label before" data-i18n="slider.before">Vorher</span>
+          <span class="cs-label after"  data-i18n="slider.after">Nachher</span>
+          <div class="cs-hint"><div class="cs-hint-pill" data-i18n="slider.hint">← Ziehen →</div></div>
+        </div>
+
+        <div class="cs-wrap" data-cs data-index="3">
+          <img class="cs-img-before" src="/assets/nidau/living-before.jpg" alt="Wohnraum — Vorher" draggable="false" />
+          <img class="cs-img-after"  src="/assets/nidau/living-after.jpg"  alt="Wohnraum — Nachher" draggable="false" />
+          <div class="cs-line"><div class="cs-handle"><span class="cs-arrow">◀</span><span class="cs-arrow">▶</span></div></div>
+          <span class="cs-label before" data-i18n="slider.before">Vorher</span>
+          <span class="cs-label after"  data-i18n="slider.after">Nachher</span>
+          <div class="cs-hint"><div class="cs-hint-pill" data-i18n="slider.hint">← Ziehen →</div></div>
+        </div>
+
+      </div>
+
+      <!-- Nav bar -->
+      <nav class="cs-nav" id="cs-nav">
+        <div class="cs-nav-room">
+          <span class="cs-nav-num" id="cs-num">01</span>
+          <span class="cs-nav-name" id="cs-name" data-i18n="nidau.room.0">Bad</span>
+        </div>
+        <div class="cs-steps">
+          <button class="cs-step active" data-cs-goto="0" data-i18n="nidau.room.0">Bad</button>
+          <button class="cs-step" data-cs-goto="1" data-i18n="nidau.room.1">Küche 1</button>
+          <button class="cs-step" data-cs-goto="2" data-i18n="nidau.room.2">Küche 2</button>
+          <button class="cs-step" data-cs-goto="3" data-i18n="nidau.room.3">Wohnraum</button>
+        </div>
+        <div class="cs-arrows">
+          <button class="cs-arrow-btn" id="cs-prev" disabled>←</button>
+          <button class="cs-arrow-btn" id="cs-next">→</button>
+        </div>
+      </nav>
+
+      <!-- Project description -->
+      <div class="page-body">
+        <p data-i18n="nidau.body">Kombination aus Hüllenoptimierung und moderner Haustechnik für einen wirtschaftlichen Gesamtansatz. Mit unserer Projektmanagement-Kompetenz und unserem starken Netzwerk an Lieferanten und Partnern haben wir das Sanierungsprojekt von der ersten Idee bis zur schlüsselfertigen Umsetzung begleitet.</p>
+      </div>
+
+      <div class="back-link">
+        <a href="/umbauten/" data-i18n="back.projects">← Zurück zu Projekten</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span data-i18n="footer.copy">© 2016 – 2026 Superurbana GmbH</span>
+      <span data-i18n="footer.loc">Ennetbaden, AG, Schweiz</span>
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+  <script>
+    (function () {
+      var slides = document.querySelectorAll('[data-cs]');
+      var steps  = document.querySelectorAll('[data-cs-goto]');
+      var stage  = document.getElementById('cs-stage');
+      var ratios = new Array(slides.length).fill(null);
+      var current = 0;
+
+      var rooms = [
+        i18n[currentLang]?.['nidau.room.0'] || 'Bad',
+        i18n[currentLang]?.['nidau.room.1'] || 'Küche 1',
+        i18n[currentLang]?.['nidau.room.2'] || 'Küche 2',
+        i18n[currentLang]?.['nidau.room.3'] || 'Wohnraum'
+      ];
+
+      // Read natural aspect ratios
+      slides.forEach(function(slide, i) {
+        var img = slide.querySelector('.cs-img-before');
+        function store() {
+          if (img.naturalWidth && img.naturalHeight) {
+            ratios[i] = img.naturalWidth / img.naturalHeight;
+            if (i === current) stage.style.aspectRatio = ratios[i].toFixed(3);
+          }
+        }
+        if (img.complete) store();
+        else img.addEventListener('load', store, { once: true });
+      });
+
+      function goTo(index) {
+        if (index < 0 || index >= slides.length) return;
+        slides[current].classList.remove('active');
+        steps[current].classList.remove('active');
+        current = index;
+        slides[current].classList.add('active');
+        steps[current].classList.add('active');
+        if (ratios[current]) stage.style.aspectRatio = ratios[current].toFixed(3);
+        document.getElementById('cs-num').textContent = String(current + 1).padStart(2, '0');
+        document.getElementById('cs-name').textContent =
+          i18n[currentLang]?.['nidau.room.' + current] || rooms[current];
+        document.getElementById('cs-prev').disabled = current === 0;
+        document.getElementById('cs-next').disabled = current === slides.length - 1;
+      }
+
+      steps.forEach(function(btn) {
+        btn.addEventListener('click', function() { goTo(parseInt(btn.dataset.csGoto)); });
+      });
+      document.getElementById('cs-prev').addEventListener('click', function() { goTo(current - 1); });
+      document.getElementById('cs-next').addEventListener('click', function() { goTo(current + 1); });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight') goTo(current + 1);
+        if (e.key === 'ArrowLeft')  goTo(current - 1);
+      });
+
+      // Drag interaction
+      slides.forEach(function(wrap) {
+        var dragging = false;
+        var hint = wrap.querySelector('.cs-hint');
+        function setPos(x) {
+          var rect = wrap.getBoundingClientRect();
+          var pct = Math.max(2, Math.min(98, (x - rect.left) / rect.width * 100));
+          wrap.style.setProperty('--pos', pct + '%');
+        }
+        function hideHint() { if (hint) hint.classList.add('hidden'); }
+        wrap.addEventListener('mousedown', function(e) {
+          dragging = true; hideHint(); setPos(e.clientX); e.preventDefault();
+        });
+        window.addEventListener('mousemove', function(e) { if (dragging) setPos(e.clientX); });
+        window.addEventListener('mouseup',   function()  { dragging = false; });
+        wrap.addEventListener('touchstart', function(e) {
+          dragging = true; hideHint(); setPos(e.touches[0].clientX);
+        }, { passive: true });
+        wrap.addEventListener('touchmove', function(e) {
+          if (dragging) setPos(e.touches[0].clientX);
+        }, { passive: true });
+        wrap.addEventListener('touchend', function() { dragging = false; });
+      });
+    })();
+  </script>
+</body>
+</html>
